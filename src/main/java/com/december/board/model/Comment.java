@@ -1,0 +1,34 @@
+package com.december.board.model;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Date;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "comment")
+public class Comment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "content")
+    private String content;
+
+    @Column(name = "date")
+    private Date date;
+
+    @ManyToOne
+    private Author author;
+
+    @ManyToOne
+    private Writing writing;
+}

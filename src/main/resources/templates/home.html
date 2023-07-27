@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<h1>Home</h1>
+
+<!--sort by views-->
+<a th:href="@{/(sortBy='id')}">Sort By Id</a>
+<a th:href="@{/(sortBy='views')}">Sort By Views</a>
+<a th:href="@{/post}">Post</a>
+<a th:href="@{/login}">Login</a>
+
+<div></div>
+<style>
+    .stripe-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 5px;
+    }
+
+    .stripe-row:nth-child(even) {
+        background-color: #dddddd;
+    }
+
+    .stripe-row:nth-child(odd) {
+        background-color: #ebebeb;
+    }
+</style>
+
+<div style="display: flex; justify-content: space-between; font-weight: bold; background-color: lightgray; color: black;">
+    <div style="flex-basis: 20%;">Id</div>
+    <div style="flex-basis: 60%;">Title</div>
+    <div style="flex-basis: 10%;">Views</div>
+    <div style="flex-basis: 10%;">Author</div>
+</div>
+
+<a th:each="writing, rowStatus : ${writingList}" class="stripe-row" th:href="@{/writing/{id}(id=${writing.getId()})}">
+    <div style="flex-basis: 20%;" th:text="${writing.getId()}"></div>
+    <div style="flex-basis: 60%;" th:text="${writing.getTitle()}"></div>
+    <div style="flex-basis: 10%;" th:text="${writing.getViews()}"></div>
+    <div style="flex-basis: 10%;" th:text="${writing.getAuthor().getName()}"></div>
+</a>
+This is home and page number is: <b th:text="${page}"></b>
+<a th:if="${page != 1}" th:href="@{/(page=${page - 1}, sortBy=${sortBy})}">Previous</a>
+<a th:href="@{/(page=${page + 1}, sortBy=${sortBy})}">Next</a>
+</body>
+</html>

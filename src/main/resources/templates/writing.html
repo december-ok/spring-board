@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${writing.getTitle()}"></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        a {
+            color: #337ab7;
+            text-decoration: none;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .meta {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        p{
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+<a th:href="@{/}">Back To Home</a>
+<h1 th:text="${writing.getTitle()}"></h1>
+<div class="meta">
+    <span>Id: </span>
+    <span th:text="${writing.getId()}"></span>
+
+    <span>/</span>
+
+    <span>Views: </span>
+    <span th:text="${writing.getViews()}"></span>
+
+    <span>/</span>
+
+    <span>Created At: </span>
+    <span th:text="${writing.getDate()}"></span>
+
+    <span>/</span>
+
+    <span>Author: </span>
+    <span th:text="${writing.getAuthor().getName()}"></span>
+</div>
+<p th:text="${writing.getContent()}"></p>
+</body>
+</html>
