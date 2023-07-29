@@ -21,7 +21,7 @@ public class CustomUserDetailService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
         UserDetails userDetails = User.builder()
                 .username(author.getName())
-                .password("{noop}"+author.getPassword())
+                .password("{bcrypt}"+author.getPassword())
                 .authorities("USER")
                 .build();
 

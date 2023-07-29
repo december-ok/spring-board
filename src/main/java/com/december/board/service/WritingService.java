@@ -5,8 +5,6 @@ import com.december.board.model.Writing;
 import com.december.board.repository.AuthorRepository;
 import com.december.board.repository.WritingRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -39,17 +37,19 @@ public class WritingService {
         return writingOptional;
     }
 
-    public Optional<Writing> postWriting(String title, String content, String author){
-        Optional<Author> authorOptional = authorRepository.findByName(author);
+    public Optional<Writing> postWriting(String title, String content, String authorName){
+        Optional<Author> authorOptional = authorRepository.findByName(authorName);
 
         if(authorOptional.isEmpty()){
             return Optional.empty();
         }
 
+        Author author = authorOptional.get();
+
         Writing writing = Writing.builder()
                 .title(title)
                 .content(content)
-                .author(authorOptional.get())
+                .author(author)
                 .date(new Date())
                 .views(0L)
                 .likes(0L)
@@ -57,6 +57,12 @@ public class WritingService {
                 .build();
 
         writing = writingRepository.save(writing);
+
+        author.getWritings().add(writing);
+        authorRepository.save(author);
+
+        System.out.println("author.getWritings().size() = " + author.getWritings().size());
+
         return Optional.of(writing);
     }
 

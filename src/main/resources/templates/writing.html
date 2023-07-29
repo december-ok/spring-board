@@ -55,5 +55,23 @@
     <span th:text="${writing.getAuthor().getName()}"></span>
 </div>
 <p th:text="${writing.getContent()}"></p>
+
+<span>Comments</span>
+<hr>
+
+<div th:each="comment:${writing.getComments()}">
+    <div>
+        <span th:text="|Author: |+${comment.getAuthor().getName()}"></span>
+        <span th:text="| / Time: |+${comment.getDate()}"></span>
+    </div>
+    <div th:text="${comment.getContent()}"></div>
+    <hr>
+</div>
+
+<form method="post" th:action="@{/comment}">
+    <input type="hidden" name="writingId" th:value="${writing.getId()}">
+    <input type="text" name="content" placeholder="Comment">
+    <input type="submit" value="Comment">
+</form>
 </body>
 </html>

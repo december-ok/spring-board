@@ -5,6 +5,7 @@ import com.december.board.service.WritingService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class WritingController {
     public String postWriting(HttpServletRequest httpRequest, Model model) {
         String title = httpRequest.getParameter("title");
         String content = httpRequest.getParameter("content");
-        String author = httpRequest.getParameter("author");
+        String author = SecurityContextHolder.getContext().getAuthentication().getName();
 
         if(title == null || content == null || author == null) {
             model.addAttribute("status", HttpStatus.BAD_REQUEST.value());
@@ -59,7 +60,6 @@ public class WritingController {
             return "error";
         }
 
-        model.addAttribute("writing", writing.get());
-        return "writing";
+        return "redirect:/writing/" + writing.get().getId();
     }
 }

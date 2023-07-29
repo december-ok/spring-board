@@ -25,14 +25,14 @@ class WritingServiceTest {
     @Transactional
     void getWritingByIdAndAddView() {
 //        given
-        Writing writing = writingService.postWriting("title", "content", "author");
-        Long view = writing.getViews();
+        Optional<Writing> writing = writingService.postWriting("title", "content", "author");
+        Long view = writing.get().getViews();
 
 //        when
-        writingService.getWritingByIdAndAddView(writing.getId());
+        writingService.getWritingByIdAndAddView(writing.get().getId());
 
 //        then
-        assertEquals(view + 1, writing.getViews());
+        assertEquals(view + 1, writing.get().getViews());
     }
 
     @Test
@@ -52,11 +52,11 @@ class WritingServiceTest {
             String randomContent = "content" + i;
             String randomAuthor = "author" + i;
 
-            Writing writing = writingService.postWriting(randomTitle, randomContent, randomAuthor);
+            Optional<Writing> writing = writingService.postWriting(randomTitle, randomContent, randomAuthor);
 
-            writingService.getWritingById(writing.getId());
+            writingService.getWritingById(writing.get().getId());
 
-            System.out.println(writing.getId());
+            System.out.println(writing.get().getId());
         }
 //        assertEquals(writing.getTitle(), "title");
     }

@@ -7,11 +7,30 @@
 <body>
 <h1>Home</h1>
 
-<!--sort by views-->
-<a th:href="@{/(sortBy='id')}">Sort By Id</a>
-<a th:href="@{/(sortBy='views')}">Sort By Views</a>
-<a th:href="@{/post}">Post</a>
-<a th:href="@{/login}">Login</a>
+<style>
+    .links a {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #000;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .links a:hover {
+        background-color: #333;
+    }
+</style>
+<div class="links">
+    <a th:href="@{/(sortBy='id')}">Sort By Id</a>
+    <a th:href="@{/(sortBy='views')}">Sort By Views</a>
+    <a th:if="${authorName == null}" th:href="@{/login}">Login</a>
+    <a th:if="${authorName == null}" th:href="@{/join}">Join</a>
+    <a th:if="${authorName}" th:href="@{/post}">Post</a>
+    <a th:if="${authorName}" th:href="@{/logout}">Logout</a>
+</div>
+
+<span th:if="${authorName}" th:text="${authorName}+| 님 환영합니다.|"></span>
 
 <div></div>
 <style>
@@ -38,12 +57,12 @@
     <div style="flex-basis: 10%;">Author</div>
 </div>
 
-<a th:each="writing, rowStatus : ${writingList}" class="stripe-row" th:href="@{/writing/{id}(id=${writing.getId()})}">
+<div th:each="writing, rowStatus : ${writingList}" class="stripe-row" >
     <div style="flex-basis: 20%;" th:text="${writing.getId()}"></div>
-    <div style="flex-basis: 60%;" th:text="${writing.getTitle()}"></div>
+    <a style="flex-basis: 60%;" th:href="@{/writing/{id}(id=${writing.getId()})}" th:text="${writing.getTitle()}+| (|+${writing.getComments().size()}+|)|"></a>
     <div style="flex-basis: 10%;" th:text="${writing.getViews()}"></div>
-    <div style="flex-basis: 10%;" th:text="${writing.getAuthor().getName()}"></div>
-</a>
+    <a style="flex-basis: 10%;" th:text="${writing.getAuthor().getName()}" th:href="@{/author/{id}(id=${writing.getAuthor().getId()})}"></a>
+</div>
 This is home and page number is: <b th:text="${page}"></b>
 <a th:if="${page != 1}" th:href="@{/(page=${page - 1}, sortBy=${sortBy})}">Previous</a>
 <a th:href="@{/(page=${page + 1}, sortBy=${sortBy})}">Next</a>

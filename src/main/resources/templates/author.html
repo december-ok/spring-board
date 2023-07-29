@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Author</title>
+</head>
+<body>
+
+<a th:href="@{/}">Back To Home</a>
+<h1 th:text="'Author '+${author.getName()}"></h1>
+<p th:text="${author.getEmail()}"></p>
+
+<style>
+    .stripe-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 5px;
+    }
+
+    .stripe-row:nth-child(even) {
+        background-color: #dddddd;
+    }
+
+    .stripe-row:nth-child(odd) {
+        background-color: #ebebeb;
+    }
+</style>
+
+
+<div style="display: flex; justify-content: space-between; font-weight: bold; background-color: lightgray; color: black;">
+    <div style="flex-basis: 20%;">Id</div>
+    <div style="flex-basis: 60%;">Title</div>
+    <div style="flex-basis: 10%;">Views</div>
+    <div style="flex-basis: 10%;">Author</div>
+</div>
+
+<a th:each="writing, rowStatus : ${author.getWritings()}" class="stripe-row" th:href="@{/writing/{id}(id=${writing.getId()})}">
+    <div style="flex-basis: 20%;" th:text="${writing.getId()}"></div>
+    <div style="flex-basis: 60%;" th:text="${writing.getTitle()}"></div>
+    <div style="flex-basis: 10%;" th:text="${writing.getViews()}"></div>
+    <div style="flex-basis: 10%;" th:text="${writing.getAuthor().getName()}"></div>
+</a>
+
+<span>작성한 댓글들</span>
+<hr>
+<div th:each="comment:${author.getComments()}">
+    <span th:text="${comment.getContent()}"></span>
+    <a th:href="@{/writing/{id}(id=${comment.getWriting().getId()})}" th:text="${comment.getWriting().getTitle()}"></a>
+    <hr>
+</div>
+
+</body>
+</html>
