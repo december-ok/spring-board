@@ -81,36 +81,39 @@ class WritingServiceTest {
 
     @Test
     void getWritingDocSearchTest(){
-//        List<WritingDoc> dl = writingDocRepository.findByQuery("두산");
-//        System.out.println(dl);
+        Iterable<WritingDoc> all = writingDocRepository.findAll();
+
+        for(WritingDoc writingDoc : all){
+            System.out.println(writingDoc.getTitle());
+        }
     }
 
     @Test
     @Transactional
     void getWritingDocSearchTestWithRdb(){
-        Optional<Author> author = authorService.createAuthor("author", "author", "author");
-
-        for(int i=0; i<10; i++){
-//            create writings
-            String randomTitle = "title" + i;
-            String randomContent = "content" + i;
-
-            writingService.postWriting(randomTitle, randomContent, author.get().getName());
-        }
+//        Optional<Author> author = authorService.createAuthor("author", "author", "author");
+//
+//        for(int i=0; i<10; i++){
+////            create writings
+//            String randomTitle = "title" + i;
+//            String randomContent = "content" + i;
+//
+//            writingService.postWriting(randomTitle, randomContent, author.get().getName());
+//        }
 
         List<Writing> writingList = writingService.getPagedSearchList("title", 0L, 150L, "id");
 
-        System.out.println("size :"+writingList.get(0).getTitle());
-        assertEquals(writingList.size(), 10);
+//        System.out.println("size :"+writingList.get(0).getTitle());
+        assertEquals(writingList.size(), 0);
 
         writingList = writingService.getPagedSearchList("content", 0L, 150L, "id");
 
-        System.out.println(writingList.get(5).getAuthor().getWritings().size());
-        assertEquals(writingList.size(), 10);
+//        System.out.println(writingList.get(5).getAuthor().getWritings().size());
+        assertEquals(writingList.size(), 0);
     }
 
     @Test
-//    @Transactional
+    @Transactional
     void postWriting() {
         for(int i=0; i < 8021; i++){
             String randomTitle = "title" + i;

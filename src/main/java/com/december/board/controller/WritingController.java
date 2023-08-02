@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -24,6 +25,28 @@ public class WritingController {
         RedirectView rv = new RedirectView();
         rv.setUrl("/");
         return rv;
+    }
+
+    @GetMapping("/search")
+    public String search(
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) Long page,
+            @RequestParam(required = false) String sortBy,
+            Model model) {
+        if(query==null) query = "";
+
+        if(page == null) page = 1L;
+        if(page < 1) page = 1L;
+
+        if(sortBy == null) sortBy = "id";
+
+        List<Writing> writingList = writingService.getPagedSearchList(query, page-1, 10L, sortBy);
+
+        model.addAttribute("query", query);
+        model.addAttribute("writings", writingList);
+        model.addAttribute("page", page);
+        model.addAttribute("sortBy", sortBy);
+        return "search";
     }
 
     @GetMapping("/{id}")

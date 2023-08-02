@@ -26,6 +26,7 @@ public class AuthorController {
         }
 
         Author author = authorOptional.get();
+        author.getWritings().sort((a, b) -> b.getId().compareTo(a.getId()));
         model.addAttribute("author", author);
 
         return "author";

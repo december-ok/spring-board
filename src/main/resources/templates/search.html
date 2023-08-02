@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="|Search for |+${query}"></title>
+</head>
+<body>
+<h1>Home</h1>
+
+<style>
+  .links a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+
+  .links a:hover {
+    background-color: #333;
+  }
+</style>
+
+<form th:action="@{/writing/search}" method="get">
+  <input type="text" name="query" placeholder="Search" th:value="${query}">
+  <input type="submit" value="Search">
+</form>
+
+<span th:text="|Search for |+${query}"></span>
+
+<div></div>
+<style>
+  .stripe-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+  }
+
+  .stripe-row:nth-child(even) {
+    background-color: #dddddd;
+  }
+
+  .stripe-row:nth-child(odd) {
+    background-color: #ebebeb;
+  }
+</style>
+
+<div style="display: flex; justify-content: space-between; font-weight: bold; background-color: lightgray; color: black;">
+  <div style="flex-basis: 20%;">Id</div>
+  <div style="flex-basis: 60%;">Title</div>
+  <div style="flex-basis: 10%;">Views</div>
+  <div style="flex-basis: 10%;">Author</div>
+</div>
+
+<div th:each="writing, rowStatus : ${writings}" class="stripe-row" >
+  <div style="flex-basis: 20%;" th:text="${writing.getId()}"></div>
+  <a style="flex-basis: 60%;" th:href="@{/writing/{id}(id=${writing.getId()})}" th:text="${writing.getTitle()}+| (|+${writing.getComments().size()}+|)|"></a>
+  <div style="flex-basis: 10%;" th:text="${writing.getViews()}"></div>
+  <a style="flex-basis: 10%;" th:text="${writing.getAuthor().getName()}" th:href="@{/author/{id}(id=${writing.getAuthor().getId()})}"></a>
+</div>
+This is home and page number is: <b th:text="${page}"></b>
+<a th:if="${page != 1}" th:href="@{/(page=${page - 1}, sortBy=${sortBy})}">Previous</a>
+<a th:href="@{/(page=${page + 1}, sortBy=${sortBy})}">Next</a>
+</body>
+</html>

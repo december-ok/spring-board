@@ -88,8 +88,10 @@ public class WritingService {
     }
 
     public List<Writing> getPagedSearchList(String query, Long page, Long size, String sortBy){
-        PageRequest pageRequest = PageRequest.of(page.intValue(), size.intValue(), Sort.by(sortBy).descending());
+        PageRequest pageRequest = PageRequest.of(page.intValue(), size.intValue());
         Page<WritingDoc> writingSlice = writingDocRepository.findByQuery(query, pageRequest);
+
+        System.out.println("HERE: 1");
 
         List<WritingDoc> writingDocList = writingSlice.getContent();
         List<Writing> writingList = new ArrayList<Writing>();
@@ -98,6 +100,9 @@ public class WritingService {
             Optional<Writing> writingOptional = writingRepository.findById(writingDoc.getId());
             writingOptional.ifPresent(writing -> writingList.add(writing));
         });
+
+        System.out.println("HERE: 2");
+
 
         return writingList;
     }

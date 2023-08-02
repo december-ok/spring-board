@@ -21,6 +21,11 @@
         background-color: #333;
     }
 </style>
+<!--make search bar-->
+<form th:action="@{/writing/search}" method="get">
+    <input type="text" name="query" placeholder="Search">
+    <input type="submit" value="Search">
+</form>
 <div class="links">
     <a th:href="@{/(sortBy='id')}">Sort By Id</a>
     <a th:href="@{/(sortBy='views')}">Sort By Views</a>

@@ -26,7 +26,10 @@ public class HomeContorller {
     private final AuthorService authorService;
 
     @RequestMapping("/")
-    public String home(@RequestParam(required = false) Long page, @RequestParam(required = false) String sortBy, Model model) {
+    public String home(
+            @RequestParam(required = false) Long page,
+            @RequestParam(required = false) String sortBy,
+            Model model) {
         if (page == null) page = 1L;
         if(page < 1) page = 1L;
 
