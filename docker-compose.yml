@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:15.2-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=messi
+      - POSTGRES_PASSWORD=messi
+      - POSTGRES_DB=board
+    restart: always
+
+  redis:
+    image: redis:7.0.12-alpine
+    ports:
+      - "6379:6379"
+    restart: always
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.9.0
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    restart: always

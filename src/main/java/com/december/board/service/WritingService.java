@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,13 +28,11 @@ public class WritingService {
     private final WritingDocRepository writingDocRepository;
 
     public Optional<Writing> getWritingByIdAndAddView(Long id) {
-        Optional<Writing> writingOptional = writingRepository.findById(id);
-
-        if (writingOptional.isPresent()) {
-            Writing writing = writingOptional.get();
-            writing.setViews(writing.getViews() + 1);
-            writingRepository.save(writing);
+        int changed = writingRepository.addView(id);
+        if(changed == 0){
+            return Optional.empty();
         }
+        Optional<Writing> writingOptional = writingRepository.findById(id);
 
         return writingOptional;
     }
