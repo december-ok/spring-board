@@ -1,4 +1,4 @@
-package com.december.board;
+package com.december.board.config;
 
 import com.december.board.service.CustomUserDetailService;
 import lombok.AllArgsConstructor;

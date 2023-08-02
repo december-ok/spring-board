@@ -1,4 +1,4 @@
-package com.december.board;
+package com.december.board.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

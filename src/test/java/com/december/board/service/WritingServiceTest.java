@@ -1,12 +1,20 @@
 package com.december.board.service;
 
+import com.december.board.document.WritingDoc;
+import com.december.board.model.Author;
 import com.december.board.model.Writing;
+import com.december.board.repository.WritingDocRepository;
+import com.december.board.repository.WritingRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,6 +23,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class WritingServiceTest {
     @Autowired
     WritingService writingService;
+
+    @Autowired
+    AuthorService authorService;
+
+    @Autowired
+    WritingDocRepository writingDocRepository;
+
+    @Autowired
+    WritingRepository writingRepository;
 
     @Test
     void getWritingById() {
@@ -44,6 +61,54 @@ class WritingServiceTest {
         assertEquals(Optional.empty(), writing);
     }
 
+
+    @Test
+    void putElasticTest(){
+        Writing writing = Writing.builder()
+                .id(99L)
+                .title("동해물과")
+                .content("백두산이")
+                .build();
+
+//        writingService.addToElasticSearch(writing);
+
+        WritingDoc writingDoc = writingService.getWritingDocById(99L).get();
+
+        assertEquals(writingDoc.getId(), 99L);
+        assertEquals(writingDoc.getTitle(), "동해물과");
+        assertEquals(writingDoc.getContent(), "백두산이");
+    }
+
+    @Test
+    void getWritingDocSearchTest(){
+//        List<WritingDoc> dl = writingDocRepository.findByQuery("두산");
+//        System.out.println(dl);
+    }
+
+    @Test
+    @Transactional
+    void getWritingDocSearchTestWithRdb(){
+        Optional<Author> author = authorService.createAuthor("author", "author", "author");
+
+        for(int i=0; i<10; i++){
+//            create writings
+            String randomTitle = "title" + i;
+            String randomContent = "content" + i;
+
+            writingService.postWriting(randomTitle, randomContent, author.get().getName());
+        }
+
+        List<Writing> writingList = writingService.getPagedSearchList("title", 0L, 150L, "id");
+
+        System.out.println("size :"+writingList.get(0).getTitle());
+        assertEquals(writingList.size(), 10);
+
+        writingList = writingService.getPagedSearchList("content", 0L, 150L, "id");
+
+        System.out.println(writingList.get(5).getAuthor().getWritings().size());
+        assertEquals(writingList.size(), 10);
+    }
+
     @Test
 //    @Transactional
     void postWriting() {
@@ -54,7 +119,7 @@ class WritingServiceTest {
 
             Optional<Writing> writing = writingService.postWriting(randomTitle, randomContent, randomAuthor);
 
-            writingService.getWritingById(writing.get().getId());
+            writingService.getWritingByIdAndAddView(writing.get().getId());
 
             System.out.println(writing.get().getId());
         }
