@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class WritingService {
     private final WritingRepository writingRepository;
     private final AuthorRepository authorRepository;
@@ -37,6 +38,7 @@ public class WritingService {
         return writingOptional;
     }
 
+    @Transactional
     public Optional<Writing> postWriting(String title, String content, String authorName){
         Optional<Author> authorOptional = authorRepository.findByName(authorName);
 
@@ -45,6 +47,7 @@ public class WritingService {
         }
 
         Author author = authorOptional.get();
+
 
         Writing writing = Writing.builder()
                 .title(title)
@@ -62,8 +65,6 @@ public class WritingService {
 
         author.getWritings().add(writing);
         authorRepository.save(author);
-
-        System.out.println("author.getWritings().size() = " + author.getWritings().size());
 
         return Optional.of(writing);
     }
@@ -105,7 +106,6 @@ public class WritingService {
 
         return writingList;
     }
-
 
     public List<Writing> getPagedList(Long page, Long size, String sortBy) {
         PageRequest pageRequest = PageRequest.of(page.intValue(), size.intValue(), Sort.by(sortBy).descending());
