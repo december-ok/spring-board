@@ -19,10 +19,6 @@ public class CommentService {
     private final AuthorRepository authorRepository;
     private final WritingRepository writingRepository;
 
-    public Optional<Comment> getCommentById(Long id) {
-        return commentRepository.findById(id);
-    }
-
     public Optional<Comment> createComment(String content, Long writingId, String authorName) {
         Author author = authorRepository.findByName(authorName).orElse(null);
         Writing writing = writingRepository.findById(writingId).orElse(null);

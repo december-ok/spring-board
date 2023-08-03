@@ -21,7 +21,7 @@ public class WritingController {
     private WritingService writingService;
 
     @GetMapping
-    public RedirectView home(Model model) {
+    public RedirectView home() {
         RedirectView rv = new RedirectView();
         rv.setUrl("/");
         return rv;

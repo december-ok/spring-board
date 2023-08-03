@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -33,9 +32,8 @@ public class WritingService {
         if(changed == 0){
             return Optional.empty();
         }
-        Optional<Writing> writingOptional = writingRepository.findById(id);
 
-        return writingOptional;
+        return writingRepository.findById(id);
     }
 
     @Transactional
@@ -69,40 +67,31 @@ public class WritingService {
         return Optional.of(writing);
     }
 
-    public WritingDoc addToElasticSearch(Writing writing){
+    public void addToElasticSearch(Writing writing){
         WritingDoc writingDoc = WritingDoc.builder()
                 .id(writing.getId())
                 .title(writing.getTitle())
                 .content(writing.getContent())
                 .build();
 
-        writingDoc = writingDocRepository.save(writingDoc);
-
-        return writingDoc;
+        writingDocRepository.save(writingDoc);
     }
 
     public Optional<WritingDoc> getWritingDocById(Long id){
-        Optional<WritingDoc> writingDocOptional = writingDocRepository.findById(id);
-
-        return writingDocOptional;
+        return writingDocRepository.findById(id);
     }
 
     public List<Writing> getPagedSearchList(String query, Long page, Long size, String sortBy){
-        PageRequest pageRequest = PageRequest.of(page.intValue(), size.intValue());
+        PageRequest pageRequest = PageRequest.of(page.intValue(), size.intValue(), Sort.by(sortBy).descending());
         Page<WritingDoc> writingSlice = writingDocRepository.findByQuery(query, pageRequest);
 
-        System.out.println("HERE: 1");
-
         List<WritingDoc> writingDocList = writingSlice.getContent();
-        List<Writing> writingList = new ArrayList<Writing>();
+        List<Writing> writingList = new ArrayList<>();
 
-        writingDocList.stream().forEach(writingDoc -> {
+        writingDocList.forEach(writingDoc -> {
             Optional<Writing> writingOptional = writingRepository.findById(writingDoc.getId());
-            writingOptional.ifPresent(writing -> writingList.add(writing));
+            writingOptional.ifPresent(writingList::add);
         });
-
-        System.out.println("HERE: 2");
-
 
         return writingList;
     }
@@ -111,8 +100,6 @@ public class WritingService {
         PageRequest pageRequest = PageRequest.of(page.intValue(), size.intValue(), Sort.by(sortBy).descending());
         Slice<Writing> writingSlice = writingRepository.findSliceBy(pageRequest);
 
-        List<Writing> writingList = writingSlice.getContent();
-
-        return writingList;
+        return writingSlice.getContent();
     }
 }

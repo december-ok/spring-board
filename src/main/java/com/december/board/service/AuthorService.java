@@ -1,7 +1,6 @@
 package com.december.board.service;
 
 import com.december.board.model.Author;
-import com.december.board.model.Writing;
 import com.december.board.repository.AuthorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,8 +38,6 @@ public class AuthorService {
     }
 
     public Optional<Author> getAuthorById(Long id) {
-        Optional<Author> authorOptional = authorRepository.findById(id);
-
-        return authorOptional;
+        return authorRepository.findById(id);
     }
 }

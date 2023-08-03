@@ -9,17 +9,18 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WritingDocRepository extends ElasticsearchRepository<WritingDoc, Long> {
-    @Query("{\n" +
-            "     \"bool\": { \n" +
-            "       \"should\": [ \n" +
-            "          { \"match\": { \"title\": \"?0\" } },\n" +
-            "          { \"match\": { \"title.nori\": \"?0\" } },\n" +
-            "          { \"match\": { \"title.ngram\": \"?0\" } },\n" +
-            "          { \"match\": { \"content\": \"?0\" } },\n" +
-            "          { \"match\": { \"content.nori\": \"?0\" } },\n" +
-            "          { \"match\": { \"content.ngram\": \"?0\" } }\n" +
-            "       ]\n" +
-            "     }\n" +
-            "  }")
+    @Query("""
+            {
+                 "bool": {
+                   "should": [
+                      { "match": { "title": "?0" } },
+                      { "match": { "title.nori": "?0" } },
+                      { "match": { "title.ngram": "?0" } },
+                      { "match": { "content": "?0" } },
+                      { "match": { "content.nori": "?0" } },
+                      { "match": { "content.ngram": "?0" } }
+                   ]
+                 }
+            }""")
     Page<WritingDoc> findByQuery(String Query, Pageable pageable);
 }

@@ -21,7 +21,7 @@ public class AuthorController {
     public String getAuthor(@PathVariable Long id, Model model) {
         Optional<Author> authorOptional = authorService.getAuthorById(id);
 
-        if(!authorOptional.isPresent()) {
+        if(authorOptional.isEmpty()) {
             return "error";
         }
 

@@ -9,7 +9,6 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -21,7 +20,7 @@ public class SecurityConfig {
         auth.authenticationProvider(daoAuthenticationProvider());
 
         http.csrf(CsrfConfigurer::disable);
-        http.authorizeRequests(authorize -> authorize
+        http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/post").hasAuthority("USER")
                 .requestMatchers("/comment").hasAuthority("USER")
                 .requestMatchers("/comment/**").hasAuthority("USER")

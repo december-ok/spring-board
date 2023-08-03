@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -19,12 +18,11 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Author author = authorRepository.findByName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
-        UserDetails userDetails = User.builder()
+
+        return User.builder()
                 .username(author.getName())
                 .password("{bcrypt}"+author.getPassword())
                 .authorities("USER")
                 .build();
-
-        return userDetails;
     }
 }

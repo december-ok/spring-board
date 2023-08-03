@@ -5,7 +5,6 @@ import com.december.board.model.Writing;
 import com.december.board.service.AuthorService;
 import com.december.board.service.WritingService;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,14 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
 @Controller
 @RequestMapping("/")
-public class HomeContorller {
+public class HomeController {
     private WritingService writingService;
     private final AuthorService authorService;
 
