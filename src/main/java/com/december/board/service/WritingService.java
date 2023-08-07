@@ -86,12 +86,8 @@ public class WritingService {
         Page<WritingDoc> writingSlice = writingDocRepository.findByQuery(query, pageRequest);
 
         List<WritingDoc> writingDocList = writingSlice.getContent();
-        List<Writing> writingList = new ArrayList<>();
-
-        writingDocList.forEach(writingDoc -> {
-            Optional<Writing> writingOptional = writingRepository.findById(writingDoc.getId());
-            writingOptional.ifPresent(writingList::add);
-        });
+        List<Long> writingIdList = writingDocList.stream().map(WritingDoc::getId).toList();
+        List<Writing> writingList = writingRepository.findByIdIn(writingIdList);
 
         return writingList;
     }
